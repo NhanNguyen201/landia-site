@@ -1,8 +1,8 @@
 class Block {
-    constructor({x,y, block, matStore}){
+    constructor({x, z, block, matStore}){
         this.block = new THREE.Group()
        
-        if(x == 1  && y == 0) {
+        if(x == 1  && z == 0) {
             let plane = new THREE.Mesh( 
                 new THREE.PlaneGeometry( 0.85, 0.85 ), 
                 new THREE.MeshBasicMaterial( {map: matStore.getMat(block.mainImage), side: THREE.DoubleSide} )
@@ -12,7 +12,7 @@ class Block {
 
             plane.position.x = 0.5
             this.block.add(plane)
-        } else if (x == -1 && y == 0) {
+        } else if (x == -1 && z == 0) {
             
             let plane = new THREE.Mesh( 
                 new THREE.PlaneGeometry( 0.85, 0.85 ), 
@@ -23,7 +23,7 @@ class Block {
 
             plane.position.x = -0.5
             this.block.add(plane)
-        } else if(x == 0 && y == -1) {
+        } else if(x == 0 && z == -1) {
             
             let plane = new THREE.Mesh( 
                 new THREE.PlaneGeometry( 0.85, 0.85 ), 
@@ -34,7 +34,7 @@ class Block {
 
             plane.position.z = -0.5
             this.block.add(plane)
-        } else if(x == 0  && y == 1){
+        } else if(x == 0  && z == 1){
             
             let plane = new THREE.Mesh( 
                 new THREE.PlaneGeometry( 0.85, 0.85 ), 
@@ -44,7 +44,7 @@ class Block {
             plane.castShadow = true
 
             this.block.add(plane)
-        } else if(x == 1 && y == 1) {
+        } else if(x == 1 && z == 1) {
             
             let plane_1 = new THREE.Mesh( 
                 new THREE.PlaneGeometry( 0.85, 0.85 ), 
@@ -64,7 +64,7 @@ class Block {
             plane_2.position.z = 0.5
             this.block.add(plane_2)
 
-        }else if(x == -1 && y == 1) {
+        }else if(x == -1 && z == 1) {
             
             let plane_1 = new THREE.Mesh( 
                 new THREE.PlaneGeometry( 0.85, 0.85 ), 
@@ -85,7 +85,7 @@ class Block {
 
             this.block.add(plane_2)
 
-        }else if(x == 1 && y == -1) {
+        }else if(x == 1 && z == -1) {
             
             let plane_1 = new THREE.Mesh( 
                 new THREE.PlaneGeometry( 0.85, 0.85 ), 
@@ -106,7 +106,7 @@ class Block {
             plane_2.castShadow = true
             this.block.add(plane_2)
 
-        }else if(x == -1 && y == -1) {
+        }else if(x == -1 && z == -1) {
             
             let plane_1 = new THREE.Mesh( 
                 new THREE.PlaneGeometry( 0.85, 0.85 ), 
@@ -129,6 +129,6 @@ class Block {
 
 
         this.block.position.x = x
-        this.block.position.z = y
+        this.block.position.z = z
     }
 }

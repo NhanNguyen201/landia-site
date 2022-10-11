@@ -1,9 +1,9 @@
 class Floor {
-    constructor({z, blocks, matStore}){
+    constructor({y, blocks, matStore}){
         this.floorGroup = new THREE.Group() 
-        this.floorGroup.position.y = z + 0.5
+        this.floorGroup.position.y = y + 0.5
         for(let i = 0; i < blocks.length; i++){
-            let block = new Block({x: blocks[i].x, y: blocks[i].y, block: blocks[i], matStore})
+            let block = new Block({x: blocks[i].x, z: blocks[i].z, block: blocks[i], matStore})
             this.floorGroup.add(block.block)
         }
     }

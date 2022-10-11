@@ -23,10 +23,10 @@ module.exports.calcPositions = pos => {
         area: pos ? Math.trunc(roundPos / areaSize) + rem[String(roundPos % areaSize)] : 0
     }
 }
-module.exports.checkVisibleBlock = ({x, y, z, areaX, areaY}) => {
+module.exports.checkVisibleBlock = ({x, y, z, areaX, areaZ}) => {
     
     return new Promise((resolve, reject) => {
-        client.fetch(`*[_type == "sideImage" &&  block.x == ${x} && block.y == ${y} && block.z == ${z} && area.x == ${areaX} && area.y == ${areaY}]{
+        client.fetch(`*[_type == "sideImage" &&  block.x == ${x} && block.y == ${y} && block.z == ${z} && area.x == ${areaX} && area.z == ${areaZ}]{
             user
         }`)
         .then(data => {
@@ -54,7 +54,7 @@ module.exports.getAllBlock = () => {
             mainImage,
             area {
                 x,
-                y
+                z
             },
             block {
                 x,

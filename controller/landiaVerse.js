@@ -3,6 +3,12 @@ const { urlFor } = require('../helpers/sanityClient')
 
 module.exports.getWorld = async(req, res) => {
     try {
+        const { x, y, z } = req.query
+        const position = {
+            x: Number(x) || 2.5,
+            y: Number(y) || 1,
+            z: Number(z) || 15,
+        }
         const data = await helpers.getAllBlock()
 
         const worldConfig = await helpers.getWorldSetting({size: data.length})
@@ -11,8 +17,15 @@ module.exports.getWorld = async(req, res) => {
             ...block, mainImage: urlFor(block.mainImage).url()
         }))
 
-        return res.render("index", { world: JSON.stringify({data: {blocks: builtImgData, worldConfig}}) })
+        return res.render("index", { 
+            world: JSON.stringify({data: {blocks: builtImgData, worldConfig}}),
+            position: JSON.stringify(position)
+        })
     } catch (error) {
-        return res.render("index", { world: JSON.stringify({data: {blocks: [], worldConfig: {}}}) })
+        console.log("Error: ", error)
+        return res.render("index", { 
+            world: JSON.stringify({data: {blocks: [], worldConfig: {}}}) ,
+            position: JSON.stringify(position)
+        })
     }
 }

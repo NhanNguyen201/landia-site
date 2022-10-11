@@ -7,10 +7,10 @@ module.exports.createImage = async (req, res) => {
     const bodyUser = JSON.parse(req.body.user)
     let resultPossition = {
         x: calcPositions(bodyPosition.x).newPos,
-        y: calcPositions(bodyPosition.y).newPos,
-        z: bodyPosition.z || 0,
+        y: bodyPosition.y || 0,
+        z: calcPositions(bodyPosition.z).newPos,
         areaX: calcPositions(bodyPosition.x).area,
-        areaY: calcPositions(bodyPosition.y).area
+        areaZ: calcPositions(bodyPosition.z).area
     }
     writeClient.assets.upload('image', fileBuffer, { contentType: req.file.mimetype, filename: req.file.originalname })
         .then(document => {
@@ -30,19 +30,19 @@ module.exports.createImage = async (req, res) => {
                     },
                     block: {
                         x: resultPossition.x,
-                        y: resultPossition.y,
-                        z: Number(JSON.parse(req.body.position).z) || 0
+                        y: Number(JSON.parse(req.body.position).y) || 0,
+                        z: resultPossition.z
                     },
                     area: {
                         x: resultPossition.areaX,
-                        y: resultPossition.areaY
+                        z: resultPossition.areaZ
                     }
                 }
                 writeClient.create(doc)
             } 
         })
         .then(() => {
-            return res.json({message: `Added to Landia successfully to the area of {${resultPossition.areaX}, ${resultPossition.areaY}} and the block of {${resultPossition.x}, ${resultPossition.y}, ${resultPossition.z}}`})
+            return res.json({message: `Added to Landia successfully to the area of {${resultPossition.areaX}, ${resultPossition.areaZ}} and the block of {${resultPossition.x}, ${resultPossition.y}, ${resultPossition.z}}`})
         })
         .catch(err => {
             return res.status(500).json({error: "Something is wrong"})
@@ -53,21 +53,21 @@ module.exports.checkBlock = async (req, res) => {
     const bodyPosition = JSON.parse(req.body.position)
     let resultPossition = {
         x: calcPositions(bodyPosition.x).newPos,
-        y: calcPositions(bodyPosition.y).newPos,
-        z: bodyPosition.z || 0,
+        y: bodyPosition.y || 0,
+        z: calcPositions(bodyPosition.z).newPos,
         areaX: calcPositions(bodyPosition.x).area,
-        areaY: calcPositions(bodyPosition.y).area
+        areaZ: calcPositions(bodyPosition.z).area
     }
     try {
         const data = await checkVisibleBlock(resultPossition)
         if(data.isThere){
             return res.json({
-                message: `this area of {${resultPossition.areaX}, ${resultPossition.areaY}} and block of {${resultPossition.x}, ${resultPossition.y}, ${resultPossition.z}} is unavailable. It belongs to ${data.user.userName} 😭`,
+                message: `this area of {${resultPossition.areaX}, ${resultPossition.areaZ}} and block of {${resultPossition.x}, ${resultPossition.y}, ${resultPossition.z}} is unavailable. It belongs to ${data.user.userName} 😭`,
                 blockStatus: 0
             })
         } else {
             return res.json({
-                message: `this area of {${resultPossition.areaX}, ${resultPossition.areaY}} and block of {${resultPossition.x}, ${resultPossition.y}, ${resultPossition.z}} is available. You can use it, 😍`,
+                message: `this area of {${resultPossition.areaX}, ${resultPossition.areaZ}} and block of {${resultPossition.x}, ${resultPossition.y}, ${resultPossition.z}} is available. You can use it, 😍`,
                 blockStatus: 1
             })
         }
