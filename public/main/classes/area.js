@@ -1,6 +1,8 @@
 class OctaDeco {
     constructor({position}){
         this.octGroup = new THREE.Group();
+        this.wallGroup = new THREE.Group();
+
         this.octGroup.position.x = position.x
         this.octGroup.position.y = position.y
         this.octGroup.position.z = position.z
@@ -10,6 +12,24 @@ class OctaDeco {
         )
         this.octa.position.y = 0.25
         this.octa.castShadow = true
+        this.wallGeo = new THREE.BufferGeometry()
+        this.wallGeo.setAttribute( 'position', new THREE.BufferAttribute( new Float32Array(wallVert), 3 ) );
+        
+        this.wallGeo.computeVertexNormals()
+
+        this.wallMesh = new THREE.Mesh( 
+            this.wallGeo,
+            new THREE.MeshPhongMaterial( {color: 0xfc6de0, side: THREE.DoubleSide} ) 
+        );
+
+        this.wallMesh.position.y = -0.25
+        this.wallMesh.position.x = 0.025
+        this.wallMesh.position.z = -0.025
+
+        this.wallMesh.castShadow = true
+        this.wallGroup.add(this.wallMesh)
+        this.wallGroup.position.copy(this.octGroup.position)
+        
         this.octGroup.add(this.octa)
        
     }
@@ -65,84 +85,10 @@ class Area {
                 y: 0.25,
                 z: (this.areaSize / 2) * Math.cos(i * Math.PI /2 + Math.PI /4)
             }})
+            oct.wallGroup.rotation.y =(i - 1) * Math.PI / 2
             this.octs.push(oct)
-
-            oct.line = new THREE.Line( 
-                new THREE.BufferGeometry().setFromPoints([
-                    new THREE.Vector3( 0, 0, 0 ),
-                    new THREE.Vector3( 0, 0.1, 0 ),
-                    new THREE.Vector3( -0.225, 0.25, 0 ),
-                    new THREE.Vector3( -1, 0.25, 0 ),
-                    new THREE.Vector3( -1, 0, 0 ),
-                    new THREE.Vector3( 0, 0, 0 ),
-                    new THREE.Vector3( 0, 0.1, 0 ),
-                    new THREE.Vector3( 0, 0.25, 0.225 ),
-                    new THREE.Vector3( 0, 0.25, 1 ),
-                    new THREE.Vector3( 0, 0, 1 ),                    
-                    new THREE.Vector3( 0, 0, 0 ),
-                ]), 
-                new THREE.LineBasicMaterial({
-                    color: 0x5e0044,
-                }) 
-            ); 
-            let wallGeo = new THREE.BufferGeometry()
-            wallGeo.setAttribute( 'position', new THREE.BufferAttribute( new Float32Array([
-                0.,0.,0.,
-                0.,  0.1, 0.,
-                -0.225, 0.1, 0.,
-                
-                0.,0.,0.,
-                -0.225, 0., 0.,
-                -0.225, 0.1, 0.,
-
-                -0.225, 0.1, 0.,
-                -0.225, 0.25, 0.,
-                0., 0.1, 0.,
-
-                -0.225, 0. , 0.,
-                -1., 0. , 0.,
-                -1., 0.25 , 0.,
-
-                -0.225, 0. , 0.,
-                -0.225, 0.25 , 0.,
-                -1., 0.25 , 0.,
-
-                //
-                0.,0.,0.,
-                0.,  0.1, 0.,
-                0., 0.1, 0.225,
-                
-                0.,0.,0.,
-                0., 0., 0.225,
-                0., 0.1, 0.225,
-
-                0., 0.1, 0.225,
-                0., 0.25, 0.225,
-                0., 0.1, 0.,
-
-                0., 0. , 0.225,
-                0., 0. , 1.,
-                0., 0.25 , 1.,
-
-                0., 0. , 0.225,
-                0., 0.25 , 0.225,
-                0., 0.25 , 1,
-
-            ]), 3 ) );
-            oct.wallMesh = new THREE.Mesh( 
-                wallGeo,
-                new THREE.MeshBasicMaterial( {color: 0x1c468a, side: THREE.DoubleSide} ) 
-            );
-
-            oct.wallMesh.rotation.y =(i - 1) * Math.PI / 2
-            oct.line.rotation.y = (i - 1) * Math.PI / 2
-            oct.line.position.y = -0.25
-            oct.wallMesh.position.y = -0.25
-            oct.wallMesh.castShadow = true
-            // oct.octGroup.add(oct.line)
-            oct.octGroup.add(oct.wallMesh)
-
             this.areaGroup.add(oct.octGroup)
+            this.areaGroup.add(oct.wallGroup)
         }
         Object.entries(this.floor).forEach(([key, value]) => {
             let floor = new Floor({y: Number(key), blocks: value.blocks, matStore})

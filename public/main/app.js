@@ -38,7 +38,6 @@ class App {
        
         this.matStore = new MatStore()
         await this.matStore.load(this.worldBlockData) 
-
         this.#addEvents();
         this.#addLights()
         this.#initArea()
