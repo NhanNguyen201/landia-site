@@ -27,6 +27,27 @@ class OctaDeco {
         this.wallMesh.position.z = -0.025
 
         this.wallMesh.castShadow = true
+
+        this.shpere_1 = new THREE.Mesh(
+            new THREE.SphereGeometry( 0.03, 32, 32 ),
+            new THREE.MeshPhongMaterial( {color: 0x6af0f7, side: THREE.DoubleSide} ) 
+        )
+        this.shpere_1.position.x = 0
+        this.shpere_1.position.z = 0.885
+        this.shpere_1.position.y = 0.075
+        this.shpere_1.castShadow = true
+        this.wallGroup.add(this.shpere_1)
+
+        this.shpere_2 = new THREE.Mesh(
+            new THREE.SphereGeometry( 0.03,  32, 32 ),
+            new THREE.MeshPhongMaterial( {color: 0x6af0f7, side: THREE.DoubleSide} ) 
+        )
+        this.shpere_2.position.z = 0
+        this.shpere_2.position.x = -0.885
+        this.shpere_2.position.y = 0.075
+        this.shpere_2.castShadow = true
+        this.wallGroup.add(this.shpere_2)
+
         this.wallGroup.add(this.wallMesh)
         this.wallGroup.position.copy(this.octGroup.position)
         
